@@ -23,3 +23,4 @@ dependencyResolutionManagement {
 rootProject.name = "MatchMate"
 include(":app")
 include(":domain")
+include(":data")

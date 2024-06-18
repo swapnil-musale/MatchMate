@@ -41,6 +41,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     packaging {
         resources {
@@ -51,11 +52,13 @@ android {
 
 dependencies {
     implementation(projects.domain)
+    implementation(projects.data)
 
     // Core
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
+    implementation(libs.compose.lifecycle)
 
     // Compose
     implementation(platform(libs.androidx.compose.bom))

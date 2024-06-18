@@ -1,4 +1,4 @@
-package com.devx.matchmate.ui.theme
+package com.devx.matchmate.theme
 
 import androidx.compose.ui.graphics.Color
 
