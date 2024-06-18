@@ -1,3 +1,4 @@
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 pluginManagement {
     repositories {
         google {
@@ -21,3 +22,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "MatchMate"
 include(":app")
+include(":domain")
