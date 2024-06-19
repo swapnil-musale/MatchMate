@@ -5,4 +5,5 @@ data class ProfileMatch(
     val name: String,
     val profilePicUrl: String,
     val address: String,
+    val status: Int = -1,
 )

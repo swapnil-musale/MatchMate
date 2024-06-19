@@ -16,7 +16,7 @@ data class ProfileMatchDto(
                 ProfileMatch(
                     name = "${matchResult.name.first} ${matchResult.name.last}",
                     userId = matchResult.login.uuid,
-                    profilePicUrl = matchResult.picture.medium,
+                    profilePicUrl = matchResult.picture.large,
                     address = "${matchResult.location.street.number}, ${matchResult.location.street.name}",
                 )
             }.toList()
@@ -56,4 +56,4 @@ data class Street(
 
 @Keep
 @JsonClass(generateAdapter = true)
-data class Picture(val medium: String)
+data class Picture(val large: String)

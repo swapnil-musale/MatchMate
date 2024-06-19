@@ -1,6 +1,7 @@
 *.iml
 .gradle
 .kotlin
+.idea
 /local.properties
 /.idea/caches
 /.idea/libraries
@@ -15,3 +16,4 @@
 .cxx
 local.properties
 ToDo.txt
+app/src/main/res/drawable/delete_me.png
