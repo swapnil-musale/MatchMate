@@ -7,6 +7,6 @@ import javax.inject.Inject
 
 class GetProfileMatchesUseCase @Inject constructor(private val profileRepository: ProfileRepository) {
     suspend operator fun invoke(count: Int): NetworkResponse<List<ProfileMatch>> {
-        return profileRepository.getMatches(count = count)
+        return profileRepository.getMatchesFromNetwork(count = count)
     }
 }

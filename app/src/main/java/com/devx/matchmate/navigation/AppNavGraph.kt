@@ -30,7 +30,7 @@ fun AppNavGraph(paddingValues: PaddingValues) {
             val profileMatchViewModel: ProfileMatchViewModel = hiltViewModel()
             val uiState by profileMatchViewModel.uiState.collectAsStateWithLifecycle()
 
-            ProfileMatchScreen(uiState = uiState)
+            ProfileMatchScreen(uiState = uiState, profileMatchViewModel = profileMatchViewModel)
         }
     }
 }

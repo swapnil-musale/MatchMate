@@ -30,6 +30,10 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("debug")
+        }
+        getByName("debug") {
+            isDebuggable = true
         }
     }
     compileOptions {
@@ -74,6 +78,11 @@ dependencies {
     // Retrofit
     implementation(libs.bundles.retrofit)
     ksp(libs.moshi.codegen)
+
+    // Room
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    ksp(libs.room.compiler)
 
     // Other
     implementation(libs.coil.compose)
