@@ -2,11 +2,10 @@ package com.devx.domain.useCase
 
 import com.devx.domain.model.ProfileMatch
 import com.devx.domain.repository.ProfileRepository
-import com.devx.domain.util.NetworkResponse
-import javax.inject.Inject
+import kotlinx.coroutines.flow.Flow
 
-class GetProfileMatchesUseCase @Inject constructor(private val profileRepository: ProfileRepository) {
-    suspend operator fun invoke(count: Int): NetworkResponse<List<ProfileMatch>> {
-        return profileRepository.getMatchesFromNetwork(count = count)
+class GetProfileMatchesUseCase(private val profileRepository: ProfileRepository) {
+    suspend operator fun invoke(count: Int): Flow<List<ProfileMatch>> {
+        return profileRepository.getMatches(count = count)
     }
 }

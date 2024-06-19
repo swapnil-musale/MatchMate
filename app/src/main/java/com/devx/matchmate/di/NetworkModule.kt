@@ -2,8 +2,8 @@ package com.devx.matchmate.di
 
 import android.content.Context
 import com.devx.data.dataSource.remote.ProfileApi
-import com.devx.data.repository.NetworkConnectivityManager
-import com.devx.data.utils.network.Constant
+import com.devx.data.utils.network.NetworkConnectivityManager
+import com.devx.data.utils.network.Constants
 import com.devx.matchmate.BuildConfig
 import dagger.Module
 import dagger.Provides
@@ -21,13 +21,11 @@ import javax.inject.Singleton
 object NetworkModule {
 
     @Provides
-    @Singleton
     fun provideHttpInterceptor(): HttpLoggingInterceptor {
         return HttpLoggingInterceptor().setLevel(level = HttpLoggingInterceptor.Level.BODY)
     }
 
     @Provides
-    @Singleton
     fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
         return OkHttpClient.Builder()
             .also { builder ->
@@ -39,7 +37,6 @@ object NetworkModule {
     }
 
     @Provides
-    @Singleton
     fun provideMoshiConverterFactory(): MoshiConverterFactory {
         return MoshiConverterFactory.create()
     }
@@ -51,14 +48,13 @@ object NetworkModule {
         moshiConverterFactory: MoshiConverterFactory,
     ): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(Constant.BASE_URL)
+            .baseUrl(Constants.BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(moshiConverterFactory)
             .build()
     }
 
     @Provides
-    @Singleton
     fun provideProfileApi(retrofit: Retrofit): ProfileApi = retrofit.create(ProfileApi::class.java)
 
     @Provides

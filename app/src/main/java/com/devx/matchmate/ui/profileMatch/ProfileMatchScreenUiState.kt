@@ -2,8 +2,12 @@ package com.devx.matchmate.ui.profileMatch
 
 import com.devx.domain.model.ProfileMatch
 
-data class ProfileMatchScreenUiState(
-    val isLoading: Boolean = false,
-    val profileMatchList: List<ProfileMatch>? = null,
-    val errorMessage: String? = null,
-)
+sealed class ProfileMatchScreenUiState {
+    data object Ideal: ProfileMatchScreenUiState()
+
+    data object Loading: ProfileMatchScreenUiState()
+
+    data class Success(val profileMatchList: List<ProfileMatch>): ProfileMatchScreenUiState()
+
+    data class Error(val message: String): ProfileMatchScreenUiState()
+}

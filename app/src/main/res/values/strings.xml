@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">MatchMate</string>
+    <string name="app_bar_title">Profile Matches</string>
+    <string name="no_internet_connection_message">No Internet Connection</string>
 </resources>

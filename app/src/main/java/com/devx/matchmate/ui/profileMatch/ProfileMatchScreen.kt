@@ -1,6 +1,11 @@
 package com.devx.matchmate.ui.profileMatch
 
+import android.util.Log
 import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -16,7 +21,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -26,100 +30,141 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.ImageLoader
 import coil.compose.AsyncImage
+import com.devx.data.utils.network.NetworkConnectivityManager
 import com.devx.domain.model.ProfileMatch
 import com.devx.matchmate.R
 import com.devx.matchmate.theme.MatchMateTheme
 import com.devx.matchmate.ui.common.VerticalDivider
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileMatchScreen(
-    uiState: ProfileMatchScreenUiState,
-    profileMatchViewModel: ProfileMatchViewModel = hiltViewModel(),
-) {
-    val localContext = LocalContext.current
+fun ProfileMatchScreen() {
+    val profileMatchViewModel: ProfileMatchViewModel = hiltViewModel()
+    val uiState by profileMatchViewModel.uiState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(key1 = uiState.errorMessage) {
-        if (uiState.errorMessage?.isNotEmpty() == true) {
-            Toast.makeText(localContext, uiState.errorMessage, Toast.LENGTH_SHORT).show()
-            profileMatchViewModel.resetErrorMessage()
-        }
+    LaunchedEffect(key1 = Unit) {
+        profileMatchViewModel.getProfileMatches()
     }
 
+    ProfileMatchScreenContent(
+        uiState = uiState,
+        onProfileStatusUpdated = { userId, updatedStatus ->
+            profileMatchViewModel.onProfileMatchStatusUpdated(
+                userId = userId,
+                updatedStatus = updatedStatus,
+            )
+        },
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
+@Composable
+private fun ProfileMatchScreenContent(
+    uiState: ProfileMatchScreenUiState,
+    onProfileStatusUpdated: (userId: String, updatedStatus: Int) -> Unit,
+) {
+    val localContext = LocalContext.current
+    val connectivityManager = remember { NetworkConnectivityManager(context = localContext) }
+    val isConnected =
+        connectivityManager.isConnected.collectAsStateWithLifecycle(initialValue = false)
+
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(color = MaterialTheme.colorScheme.background)
+                .nestedScroll(connection = scrollBehavior.nestedScrollConnection),
         topBar = {
-            TopAppBar(title = { Text("Profile Matches") })
+            TopAppBar(
+                modifier = Modifier.fillMaxWidth().height(height = 64.dp),
+                title = { Text(text = stringResource(id = R.string.app_bar_title)) },
+                scrollBehavior = scrollBehavior,
+            )
         },
     ) { paddingValues ->
         Box(
             modifier =
                 Modifier
                     .fillMaxSize()
-                    .background(color = MaterialTheme.colorScheme.background)
-                    .padding(paddingValues = paddingValues),
+                    .padding(top = paddingValues.calculateTopPadding()),
         ) {
-            if (uiState.profileMatchList?.isNotEmpty() == true) {
-                LazyColumn(modifier = Modifier.fillMaxSize()) {
-                    items(
-                        items = uiState.profileMatchList,
-                        key = { it.userId },
-                    ) { profileMatchItem ->
-                        ProfileMatchItem(
-                            profileMatch = profileMatchItem,
-                            onProfileAccepted = {
-                                profileMatchViewModel.onProfileMatchStatusUpdated(
-                                    userId = it.userId,
-                                    updatedStatus = 1,
-                                )
-                            },
-                            onProfileDeclined = {
-                                profileMatchViewModel.onProfileMatchStatusUpdated(
-                                    userId = it.userId,
-                                    updatedStatus = 0,
-                                )
-                            },
-                        )
+            when (uiState) {
+                is ProfileMatchScreenUiState.Loading -> {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
                     }
                 }
-            } else {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Text(text = if (uiState.isLoading) "Loading" else "No Matches")
-                }
-            }
 
-            Button(
-                onClick = {
-                    profileMatchViewModel.getProfileMatchesFromNetwork()
-                },
-                modifier =
-                    Modifier
-                        .padding(bottom = 12.dp, end = 16.dp)
-                        .align(alignment = Alignment.BottomEnd),
-            ) {
-                if (uiState.isLoading) {
-                    CircularProgressIndicator(color = Color.Black)
-                } else {
-                    Text(text = "Refresh")
+                is ProfileMatchScreenUiState.Success -> {
+                    LazyColumn(modifier = Modifier.fillMaxSize()) {
+                        stickyHeader {
+                            AnimatedVisibility(
+                                visible = isConnected.value.not(),
+                                enter = slideInVertically(),
+                                exit = slideOutVertically(),
+                            ) {
+                                Text(
+                                    modifier =
+                                        Modifier
+                                            .fillMaxWidth()
+                                            .background(color = MaterialTheme.colorScheme.error),
+                                    text = stringResource(id = R.string.no_internet_connection_message),
+                                    color = MaterialTheme.colorScheme.onError,
+                                    textAlign = TextAlign.Center,
+                                )
+                            }
+                        }
+                        items(
+                            items = uiState.profileMatchList,
+                            key = { it.userId },
+                        ) { profileMatchItem ->
+                            ProfileMatchItem(
+                                profileMatch = profileMatchItem,
+                                onProfileAccepted = {
+                                    onProfileStatusUpdated(it.userId, 1)
+                                },
+                                onProfileDeclined = {
+                                    onProfileStatusUpdated(it.userId, 0)
+                                },
+                            )
+                        }
+                    }
+                }
+
+                is ProfileMatchScreenUiState.Error -> {
+                    if (uiState.message.isNotEmpty()) {
+                        Toast.makeText(localContext, uiState.message, Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                is ProfileMatchScreenUiState.Ideal -> {
+                    Log.d("ProfileMatchScreen", "Ideal")
                 }
             }
         }
@@ -253,9 +298,9 @@ private fun ProfileCardActionButton(
 @Composable
 private fun ProfileMatchScreenPreview() {
     MatchMateTheme {
-        ProfileMatchScreen(
+        ProfileMatchScreenContent(
             uiState =
-                ProfileMatchScreenUiState(
+                ProfileMatchScreenUiState.Success(
                     profileMatchList =
                         listOf(
                             ProfileMatch(
@@ -266,6 +311,7 @@ private fun ProfileMatchScreenPreview() {
                             ),
                         ),
                 ),
+            onProfileStatusUpdated = { _, _ -> },
         )
     }
 }

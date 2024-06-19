@@ -15,6 +15,9 @@ interface ProfileDao {
     @Query("SELECT * FROM profile_match")
     fun getAllMatches(): Flow<List<ProfileMatchEntity>>
 
+    @Query("SELECT COUNT(*) FROM profile_match")
+    suspend fun getCount(): Int
+
     @Query("SELECT * FROM profile_match WHERE userId = :userId")
     fun getProfileById(userId: String): ProfileMatchEntity
 

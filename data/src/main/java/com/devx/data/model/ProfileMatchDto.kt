@@ -1,8 +1,9 @@
 package com.devx.data.model
 
 import androidx.annotation.Keep
+import com.devx.data.dataSource.local.entity.ProfileMatchEntity
+import com.devx.data.mapper.Mapper
 import com.devx.domain.model.ProfileMatch
-import com.devx.domain.util.Mapper
 import com.squareup.moshi.JsonClass
 
 @Keep
@@ -57,3 +58,11 @@ data class Street(
 @Keep
 @JsonClass(generateAdapter = true)
 data class Picture(val large: String)
+
+fun MatchResult.toEntity() =
+    ProfileMatchEntity(
+        userId = login.uuid,
+        name = "${name.first} ${name.last}",
+        profilePicUrl = picture.large,
+        address = "${location.street.number}, ${location.street.name}",
+    )

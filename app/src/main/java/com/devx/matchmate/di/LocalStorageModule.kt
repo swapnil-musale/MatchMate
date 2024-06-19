@@ -26,7 +26,6 @@ object LocalStorageModule {
     }
 
     @Provides
-    @Singleton
     fun provideProfileDao(profileDatabase: ProfileDatabase): ProfileDao {
         return profileDatabase.profileDao
     }
