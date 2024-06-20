@@ -16,6 +16,13 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
 
+/*
+In this module @Singleton is used to ensure that only one instance of the object is created and other
+will be re-created on demand. It's suggested to use @Singleton carefully - as if try to use for all the
+other objects as well then it will increase the memory usage and user might will get OutOfMemoryException
+if device is working on low memory.
+ */
+
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
@@ -36,6 +43,10 @@ object NetworkModule {
             .build()
     }
 
+    /*
+    Here we have Moshi converter to convert JSON data to Kotlin data class. Although we can use Gson
+    as well but it's not efficient solution anymore after Moshi.
+     */
     @Provides
     fun provideMoshiConverterFactory(): MoshiConverterFactory {
         return MoshiConverterFactory.create()
@@ -58,7 +69,6 @@ object NetworkModule {
     fun provideProfileApi(retrofit: Retrofit): ProfileApi = retrofit.create(ProfileApi::class.java)
 
     @Provides
-    @Singleton
     fun provideNetworkConnectivityManager(
         @ApplicationContext context: Context,
     ): NetworkConnectivityManager = NetworkConnectivityManager(context = context)
