@@ -7,7 +7,7 @@
 **MatchMate App** is built to demonstrate the use of Clean Architecture + MVVM in Android App Development. The app is mainly divided into 3 layers i.e. ```data```, ```domain``` & ```app``` (presentation).
 It also showcases the implementation of some of the Modern Jetpack Architecture Component.
 
-With the help of MatchMate Users can accept or decline the connect request and sync in persistent data to be accessible in offline mode.
+With the help of MatchMate Users can accept or decline the connect request and sync in persistent database to be accessible in offline mode.
 
 ## 👨‍💻 App Demo :
 ### Video
@@ -37,7 +37,7 @@ With the help of MatchMate Users can accept or decline the connect request and s
 ## 🧰 Other Tools :
 * [Kotlin DSL][7]: Writing gradle script for Kotlin is more readable and offers better compile-time.
 * [Version Catalog][8]: Declaring gradle dependencies & plugins in central place.
-* [KSP][9]: Automate the build, test, and deployment pipeline through GitHub Actions.
+* [KSP][9]: Kotlin Symbol Processing API.
 
 [7]:  https://docs.gradle.org/current/userguide/kotlin_dsl.html
 [8]:  https://docs.gradle.org/current/userguide/platforms.html
