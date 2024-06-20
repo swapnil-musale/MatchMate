@@ -11,7 +11,7 @@ I've added it just for demonstration purposes.
  */
 
 class GetProfileMatchesUseCase(private val profileRepository: ProfileRepository) {
-    suspend operator fun invoke(count: Int): Flow<List<ProfileMatch>> {
-        return profileRepository.getMatches(count = count)
+    suspend operator fun invoke(count: Int, fromNetwork: Boolean): Flow<List<ProfileMatch>> {
+        return profileRepository.getMatches(count = count, fromNetwork = fromNetwork)
     }
 }

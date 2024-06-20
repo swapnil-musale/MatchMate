@@ -28,17 +28,19 @@ class ProfileMatchViewModel
             MutableStateFlow(value = ProfileMatchScreenUiState.Ideal)
         val uiState: StateFlow<ProfileMatchScreenUiState> = _uiState.asStateFlow()
 
-        fun getProfileMatches() {
+        fun getProfileMatches(fromNetwork: Boolean = false) {
             viewModelScope.launch(context = coroutineDispatcher) {
                 _uiState.value = ProfileMatchScreenUiState.Loading
-                getProfileMatchesUseCase(count = DEFAULT_PROFILE_COUNT_TO_LOAD)
-                    .catch { exception ->
-                        _uiState.value =
-                            ProfileMatchScreenUiState.Error(message = exception.localizedMessage.orEmpty())
-                    }.collect { localProfileMatches ->
-                        _uiState.value =
-                            ProfileMatchScreenUiState.Success(profileMatchList = localProfileMatches.toImmutableList())
-                    }
+                getProfileMatchesUseCase(
+                    count = DEFAULT_PROFILE_COUNT_TO_LOAD,
+                    fromNetwork = fromNetwork,
+                ).catch { exception ->
+                    _uiState.value =
+                        ProfileMatchScreenUiState.Error(message = exception.localizedMessage.orEmpty())
+                }.collect { localProfileMatches ->
+                    _uiState.value =
+                        ProfileMatchScreenUiState.Success(profileMatchList = localProfileMatches.toImmutableList())
+                }
             }
         }
 

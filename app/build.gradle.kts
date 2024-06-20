@@ -69,6 +69,9 @@ dependencies {
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
+
+    // Material lib added to use Swipe to Refresh
+    implementation(libs.androidx.material)
     implementation(libs.androidx.material3)
 
     // Hilt

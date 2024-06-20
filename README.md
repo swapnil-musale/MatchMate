@@ -10,6 +10,10 @@ It also showcases the implementation of some of the Modern Jetpack Architecture 
 With the help of MatchMate Users can accept or decline the connect request and sync in persistent database to be accessible in offline mode.
 
 ## 👨‍💻 App Demo :
+### Screenshot
+<img src = "https://github.com/swapnil-musale/MatchMate/assets/15209914/1fe563f2-dcdb-46cc-a8d4-023eb66cb0a3" width=250/>
+<img src = "https://github.com/swapnil-musale/MatchMate/assets/15209914/40c63a52-165c-476a-a50d-992be57307bb" width=250/>
+
 ### Video
 [Video Demo](https://github.com/swapnil-musale/MatchMate/assets/15209914/698ba5a3-e781-4698-b746-9209b623bd19)
 

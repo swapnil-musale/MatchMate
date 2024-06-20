@@ -20,12 +20,12 @@ class ProfileRepositoryImpl
         private val profileDao: ProfileDao,
         private val connectivityManager: NetworkConnectivityManager,
     ) : ProfileRepository {
-        override suspend fun getMatches(count: Int): Flow<List<ProfileMatch>> {
+        override suspend fun getMatches(count: Int, fromNetwork: Boolean): Flow<List<ProfileMatch>> {
             val profileCount = profileDao.getCount()
             val isConnected = connectivityManager.isConnected.first()
 
             try {
-                if (profileCount < 1 && isConnected) {
+                if (isConnected && (profileCount < 1 || fromNetwork)) {
                     val response = profileApi.getProfileMatches(count = count)
                     if (response.isSuccessful) {
                         saveProfileMatchesInDatabase(response = response.body())
