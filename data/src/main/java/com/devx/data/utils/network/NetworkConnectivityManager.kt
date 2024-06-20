@@ -38,11 +38,11 @@ class NetworkConnectivityManager(
                 NetworkRequest
                     .Builder()
                     .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-                    .addCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
                     .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
                     .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
                     .build()
 
+            connectivityManager.requestNetwork(request, callback, 2000)
             connectivityManager.registerNetworkCallback(request, callback)
             awaitClose {
                 connectivityManager.unregisterNetworkCallback(callback)
