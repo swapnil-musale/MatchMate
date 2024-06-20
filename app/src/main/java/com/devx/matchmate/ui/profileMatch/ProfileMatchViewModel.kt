@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.devx.domain.useCase.GetProfileMatchesUseCase
 import com.devx.domain.useCase.UpdateProfileMatchStatusUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
@@ -36,7 +37,7 @@ class ProfileMatchViewModel
                             ProfileMatchScreenUiState.Error(message = exception.localizedMessage.orEmpty())
                     }.collect { localProfileMatches ->
                         _uiState.value =
-                            ProfileMatchScreenUiState.Success(profileMatchList = localProfileMatches)
+                            ProfileMatchScreenUiState.Success(profileMatchList = localProfileMatches.toImmutableList())
                     }
             }
         }

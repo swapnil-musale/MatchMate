@@ -56,6 +56,7 @@ import com.devx.domain.model.ProfileMatch
 import com.devx.matchmate.R
 import com.devx.matchmate.theme.MatchMateTheme
 import com.devx.matchmate.ui.common.VerticalDivider
+import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 fun ProfileMatchScreen() {
@@ -318,7 +319,7 @@ private fun ProfileMatchScreenPreview() {
                                 profilePicUrl = "",
                                 address = "Mumbai",
                             ),
-                        ),
+                        ).toImmutableList(),
                 ),
             onProfileStatusUpdated = { _, _ -> },
         )

@@ -19,6 +19,7 @@ moshi = "1.15.1"
 coil = "2.6.0"
 room = "2.6.1"
 coroutine = "1.9.0-RC"
+immutable = "0.3.7"
 
 junit = "4.13.2"
 junitVersion = "1.1.5"
@@ -60,6 +61,7 @@ room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 # Other
 coroutine-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutine" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
+kotlinx-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "immutable" }
 
 # Testing
 junit = { group = "junit", name = "junit", version.ref = "junit" }

@@ -86,6 +86,7 @@ dependencies {
 
     // Other
     implementation(libs.coil.compose)
+    implementation(libs.kotlinx.immutable)
 
     // Testing
     testImplementation(libs.junit)
