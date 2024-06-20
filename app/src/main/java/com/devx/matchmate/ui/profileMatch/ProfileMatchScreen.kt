@@ -29,7 +29,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -98,11 +97,19 @@ private fun ProfileMatchScreenContent(
                 .background(color = MaterialTheme.colorScheme.background)
                 .nestedScroll(connection = scrollBehavior.nestedScrollConnection),
         topBar = {
-            TopAppBar(
-                modifier = Modifier.fillMaxWidth().height(height = 64.dp),
-                title = { Text(text = stringResource(id = R.string.app_bar_title)) },
-                scrollBehavior = scrollBehavior,
-            )
+            Box(
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .height(height = 64.dp)
+                        .padding(start = 30.dp),
+                contentAlignment = Alignment.CenterStart,
+            ) {
+                Text(
+                    text = stringResource(id = R.string.app_bar_title),
+                    fontSize = 22.sp,
+                )
+            }
         },
     ) { paddingValues ->
         Box(
@@ -148,9 +155,11 @@ private fun ProfileMatchScreenContent(
                                 profileMatch = profileMatchItem,
                                 onProfileAccepted = {
                                     onProfileStatusUpdated(it.userId, 1)
+                                    Toast.makeText(localContext, "Accepted", Toast.LENGTH_SHORT).show()
                                 },
                                 onProfileDeclined = {
                                     onProfileStatusUpdated(it.userId, 0)
+                                    Toast.makeText(localContext, "Declined", Toast.LENGTH_SHORT).show()
                                 },
                             )
                         }

@@ -24,11 +24,16 @@ class ProfileRepositoryImpl
             val profileCount = profileDao.getCount()
             val isConnected = connectivityManager.isConnected.first()
 
-            if (profileCount < 1 && isConnected) {
-                val response = profileApi.getProfileMatches(count = count)
-                if (response.isSuccessful) {
-                    saveProfileMatchesInDatabase(response = response.body())
+            try {
+                if (profileCount < 1 && isConnected) {
+                    val response = profileApi.getProfileMatches(count = count)
+                    if (response.isSuccessful) {
+                        saveProfileMatchesInDatabase(response = response.body())
+                    }
                 }
+            } catch (exception: Exception) {
+                exception.printStackTrace()
+                throw exception
             }
 
             return profileDao
