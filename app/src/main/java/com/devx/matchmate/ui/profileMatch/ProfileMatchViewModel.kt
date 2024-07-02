@@ -39,7 +39,7 @@ class ProfileMatchViewModel
                         ProfileMatchScreenUiState.Error(message = exception.localizedMessage.orEmpty())
                 }.collect { localProfileMatches ->
                     _uiState.value =
-                        ProfileMatchScreenUiState.Success(profileMatchList = localProfileMatches.toImmutableList())
+                        ProfileMatchScreenUiState.Success(profileMatchList = localProfileMatches.reversed().toImmutableList())
                 }
             }
         }
