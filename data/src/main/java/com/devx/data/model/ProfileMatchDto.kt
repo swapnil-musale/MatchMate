@@ -2,26 +2,11 @@ package com.devx.data.model
 
 import androidx.annotation.Keep
 import com.devx.data.dataSource.local.entity.ProfileMatchEntity
-import com.devx.data.mapper.Mapper
-import com.devx.domain.model.ProfileMatch
 import com.squareup.moshi.JsonClass
 
 @Keep
 @JsonClass(generateAdapter = true)
-data class ProfileMatchDto(
-    val results: List<MatchResult>,
-) : Mapper<List<ProfileMatch>> {
-    override fun mapToDomain(): List<ProfileMatch> =
-        results
-            .map { matchResult ->
-                ProfileMatch(
-                    name = "${matchResult.name.first} ${matchResult.name.last}",
-                    userId = matchResult.login.uuid,
-                    profilePicUrl = matchResult.picture.large,
-                    address = "${matchResult.location.street.number}, ${matchResult.location.street.name}",
-                )
-            }.toList()
-}
+data class ProfileMatchDto(val results: List<MatchResult>)
 
 @Keep
 @JsonClass(generateAdapter = true)
